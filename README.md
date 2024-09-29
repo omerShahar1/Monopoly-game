@@ -7,8 +7,6 @@ This is a simple console-based implementation of the Monopoly board game, writte
 - [How to Play](#how-to-play)
 - [Classes and Objects](#classes-and-objects)
 - [Compiling and Running the Game](#compiling-and-running-the-game)
-- [Testing the Game](#testing-the-game)
-- [Future Improvements](#future-improvements)
 
 ## Game Rules
 
