@@ -39,11 +39,19 @@ void Player::move(int diceRoll) {
 void Player::pay(int amount, Player* creditor) {
     money -= amount;
     std::cout << RED << name << " paid " << amount << " and now has $" << money << " left." << RESET << "\n";
-    if (money < 0) {
+    std::cout << RED << name << " is bankrupt!" << RESET << std::endl;
+    if (money <= 0) {
         bankrupt = true;
         std::cout << RED << name << " is bankrupt!" << RESET << std::endl;
-        handleBankruptcy(creditor);
+        handleBankruptcy(this);
+
     }
+    if(creditor)
+    {
+        creditor->receive(amount);
+    }
+    
+
 }
 
 void Player::receive(int amount) {
@@ -98,7 +106,7 @@ void Player::checkFullColorSetAndOfferBuild()
     }
 
     // Check if the player owns all streets in the color group
-    int requiredCount = 0;
+    size_t requiredCount = 0;
     if (colorGroup == "blue" || colorGroup == "brown" ) {
         requiredCount = 2;  // only 2 blue streets
     } else if (colorGroup == "Light Blue" || colorGroup == "orange" || colorGroup == "pink" || colorGroup == "green" || colorGroup == "yellow" || colorGroup == "red") {
@@ -187,6 +195,7 @@ void Player::goToJail() {
     jailStatus = true;
     turnsInJail = 0;
     std::cout << RED << name << " is sent to jail!" << RESET << "\n";
+    setPosition(10);
 }
 
 void Player::leaveJail() {
