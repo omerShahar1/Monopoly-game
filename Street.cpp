@@ -1,16 +1,27 @@
 #include "Street.hpp"
 #include <iostream>
 
+const std::string GREEN = "\033[32m";
+const std::string RED = "\033[31m";
+const std::string RESET = "\033[0m";
+
 Street::Street(const std::string& name, const std::string& color, int price, int rent, int housePrice, int hotelPrice)
     : name(name), color(color), price(price), rent(rent), housePrice(housePrice), hotelPrice(hotelPrice), houses(0), hasHotel(false), owner(nullptr) {}
 
 void Street::performAction(Player& player) {
     if (owner == nullptr) {
         // Offer the player to buy the street
-        if (player.getMoney() >= price) {
-            std::cout << player.getName() << " bought " << name << " for $" << price << "\n";
-            player.pay(price);
-            owner = &player;
+        std::cout << "Would you like to " << GREEN << "PURCHASE" << RESET << " this street for $" << price << "? (y/n): ";
+        char choice;
+        std::cin >> choice;
+        if (choice == 'y' || choice == 'Y') 
+        {
+            if (player.getMoney() >= price) 
+            {
+                std::cout << player.getName() << " bought " << name << " for $" << price << "\n";
+                player.pay(price);
+                owner = &player;
+            }
         }
     } else if (owner != &player) {
         // Pay rent to the owner

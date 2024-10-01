@@ -9,6 +9,7 @@ public:
     TrainStation(int price);
     void performAction(Player& player) override;
     void display() const override;
+    Player* getOwner() const;
 
 private:
     int price;

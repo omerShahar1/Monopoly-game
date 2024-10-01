@@ -10,6 +10,7 @@ public:
     Utility(const std::string& name, int price);
     void performAction(Player& player) override;
     void display() const override;
+    Player* getOwner() const;
 
 private:
     std::string name;

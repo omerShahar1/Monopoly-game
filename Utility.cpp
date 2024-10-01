@@ -31,3 +31,7 @@ void Utility::display() const {
         std::cout << name << " - Price: " << price << "\n";
     }
 }
+
+Player* Utility::getOwner() const {
+    return owner;
+}

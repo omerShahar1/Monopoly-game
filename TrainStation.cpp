@@ -38,3 +38,7 @@ void TrainStation::display() const {
         std::cout << "🚆 Train Station - Price: $" << price << "\n";
     }
 }
+
+Player* TrainStation::getOwner() const {
+    return owner;
+}

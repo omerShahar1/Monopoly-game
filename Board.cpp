@@ -22,7 +22,8 @@ const std::map<std::string, std::string> STREET_COLORS = {
     {"red", "\033[38;5;196m"},
     {"yellow", "\033[38;5;226m"},
     {"green", "\033[38;5;46m"},
-    {"blue", "\033[38;5;21m"}
+    {"blue", "\033[38;5;21m"},
+    {"white", "\033[97m"}
 };
 
 
@@ -151,7 +152,32 @@ void Board::printSlot(int index, const std::vector<Player>& players, bool vertic
         // Print the colored street with ownership indicator
         std::cout << "|   " << std::setw(3) << index << "   | "
                   << colorCode << std::setw(19) << slotName << RESET << ownerInfo << " ";
-    } else if (dynamic_cast<GoSlot*>(slot)) {
+    }
+
+    else if (Utility* street = dynamic_cast<Utility*>(slot)) {
+        // Check for ownership
+        if (street->getOwner() != nullptr) {
+            ownerInfo = " O(" + street->getOwner()->getName().substr(0, 1) + ")";
+        }
+
+        // Print the colored street with ownership indicator
+        std::cout << "|   " << std::setw(3) << index << "   | "
+                  << "\033[97m" << std::setw(19) << "Utility" << RESET << ownerInfo << " ";
+    } 
+
+    else if (TrainStation* street = dynamic_cast<TrainStation*>(slot)) {
+        // Check for ownership
+        if (street->getOwner() != nullptr) {
+            ownerInfo = " O(" + street->getOwner()->getName().substr(0, 1) + ")";
+        }
+
+        // Print the colored street with ownership indicator
+        std::cout << "|   " << std::setw(3) << index << "   | "
+                  << "\033[97m" << std::setw(19) << "Train Station" << RESET << ownerInfo << " ";
+    } 
+    
+    
+    else if (dynamic_cast<GoSlot*>(slot)) {
         std::cout << "|   " << std::setw(3) << index << "   | " << std::setw(19) << "Go" << " ";
     } else if (dynamic_cast<JailSlot*>(slot)) {
         std::cout << "|   " << std::setw(3) << index << "   | " << std::setw(19) << "Jail" << " ";
@@ -159,8 +185,10 @@ void Board::printSlot(int index, const std::vector<Player>& players, bool vertic
         std::cout << "|   " << std::setw(3) << index << "   | " << std::setw(19) << "Free Parking" << " ";
     } else if (dynamic_cast<TaxSlot*>(slot)) {
         std::cout << "|   " << std::setw(3) << index << "   | " << std::setw(19) << "Tax Slot" << " ";
-    } else if (dynamic_cast<TrainStation*>(slot)) {
-        std::cout << "|   " << std::setw(3) << index << "   | " << std::setw(19) << "Train Station" << " ";
+    } else if (dynamic_cast<SurpriseSlot*>(slot)) {
+        std::cout << "|   " << std::setw(3) << index << "   | " << std::setw(19) << "Surprise Slot" << " ";
+    } else if (dynamic_cast<GoToJailSlot*>(slot)) {
+        std::cout << "|   " << std::setw(3) << index << "   | " << std::setw(19) << "Go To Jail Slot" << " "; 
     } else {
         std::cout << "|   " << std::setw(3) << index << "   | " << std::setw(19) << slotName << " ";
     }

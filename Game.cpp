@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "Player.hpp"
 #include <iostream>
 #include <limits>  // For std::numeric_limits
 
@@ -26,6 +27,12 @@ void Game::start() {
                 std::cout << "All players are bankrupt. The game is over.\n";
                 return;
             }
+            else if(players.size() == 1)
+            {
+                std::string name = players.at(0).getName();
+                std::cout << name << "is the winner! game over.\n";
+                return;
+            }
         } else {
             takeTurn(currentPlayer);
             currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
@@ -46,6 +53,7 @@ void Game::takeTurn(Player& player) {
     slot->performAction(player);
 
     board.drawBoard(players);
+    displayStatus();
 }
 
 bool Game::isGameOver() const {
@@ -57,7 +65,7 @@ void Game::displayStatus() const {
     for (const Player& player : players) {
         std::cout << player.getName() << " has $" << player.getMoney() << "\n";
     }
-    board.display();
+    //board.display();
 }
 
 // New method to return the list of players
