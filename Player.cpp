@@ -80,6 +80,80 @@ void Player::listProperties() const {
     }
 }
 
+// Function to check if the player owns a full color set and offer to build a house
+void Player::checkFullColorSetAndOfferBuild() 
+{
+    std::vector<std::string> colorGroups = {"blue", "brown", "Light Blue", "orange", "pink", "green", "yellow", "red"};
+    for (std::string colorGroup : colorGroups) 
+    {
+    // Track the streets in the specified color group
+    std::vector<Street*> colorGroupStreets;
+
+    // Iterate over the player's properties
+    for (Slot* property : properties) {
+        Street* street = dynamic_cast<Street*>(property);
+        if (street && street->getColor() == colorGroup) {
+            colorGroupStreets.push_back(street);
+        }
+    }
+
+    // Check if the player owns all streets in the color group
+    int requiredCount = 0;
+    if (colorGroup == "blue" || colorGroup == "brown" ) {
+        requiredCount = 2;  // only 2 blue streets
+    } else if (colorGroup == "Light Blue" || colorGroup == "orange" || colorGroup == "pink" || colorGroup == "green" || colorGroup == "yellow" || colorGroup == "red") {
+        requiredCount = 3;  // 3 streets in these groups
+    }
+
+    // If the player owns the full set, offer to build houses
+    if (colorGroupStreets.size() == requiredCount) {
+        std::cout << "You own all " << colorGroup << " streets! Would you like to build a house? (y/n): ";
+        char choice;
+        std::cin >> choice;
+
+        if (choice == 'y' || choice == 'Y') 
+        {
+            while(1)
+            {
+                for (Street* street : colorGroupStreets) 
+                {
+                    
+                    if(street->get_hasHotel())
+                    {
+                        std::cout << "there is already a hotel in " << street->getName() << ".\n";
+                        continue;
+                    }
+                    if (street->getHouses()) {
+                        std::cout << "Building a house on " << street->getName() << ".\n";
+                        street->buildHouse();
+                    } 
+                    else 
+                    {
+                            std::cout << "Building a hotel on " << street->getName() << ".\n";
+                            street->buildHouse();
+                    }
+                }
+                std::cout << "would you like to continue? (y/n):" << ".\n";
+                std::cin >> choice;
+
+                if (choice == 'n' || choice == 'N')
+                {
+                    break;
+                }
+            } 
+        }
+        else 
+        {
+            std::cout << "You chose not to build any houses.\n";
+        }
+    } 
+    else 
+    {
+        std::cout << "You don't own the full " << colorGroup << " color set yet.\n";
+    }
+    }
+}
+
 bool Player::ownsAllPropertiesInColor(const std::string& color) const {
     std::unordered_map<std::string, int> colorGroupSizes = {
         {"brown", 2}, {"Light Blue", 3}, {"pink", 3},
@@ -95,7 +169,7 @@ bool Player::ownsAllPropertiesInColor(const std::string& color) const {
     return false;
 }
 
-void Player::handleBankruptcy(Player* creditor) {
+void Player::handleBankruptcy(Player* creditor = NULL) {
     if (creditor) {
         std::cout << name << " transfers all properties to " << creditor->getName() << "!\n";
         for (Slot* property : properties) {
@@ -125,8 +199,25 @@ bool Player::hasRolledDoubles(int dice1, int dice2) const {
     return dice1 == dice2;
 }
 
-void Player::attemptToLeaveJail(int dice1, int dice2) {
+void Player::attemptToLeaveJail() {
     turnsInJail++;
+
+    if(out_of_jail_card > 0)
+    {
+        std::cout << "would you like to use get out of jail card? " << "? (y/n): " << "\n";
+        char choice;
+            std::cin >> choice;
+            if (choice == 'y' || choice == 'Y') 
+            {
+                
+                reduce_out_of_jail_card();
+                leaveJail();
+                std::cout << GREEN << name << " paid " << jailFee << " to leave jail." << RESET << "\n";
+            }
+    }
+
+    int dice1 = rand() % 6 + 1;
+    int dice2 = rand() % 6 + 1;
     if (hasRolledDoubles(dice1, dice2)) {
         leaveJail();
         std::cout << GREEN << name << " rolled doubles and left jail!" << RESET << "\n";
@@ -136,13 +227,51 @@ void Player::attemptToLeaveJail(int dice1, int dice2) {
             leaveJail();
             std::cout << GREEN << name << " paid " << jailFee << " to leave jail." << RESET << "\n";
         } else {
-            std::cout << RED << name << " cannot afford the jail fee and remains in jail." << RESET << "\n";
+            bankrupt = true;
+            handleBankruptcy();
+            std::cout << RED << name << " cannot afford the jail fee and going bankrupt." << RESET << "\n";
         }
     } else {
         std::cout << RED << name << " did not roll doubles and remains in jail." << RESET << "\n";
+        std::cout << "would you like to pay the fine? " << "? (y/n): " << "\n";
+        char choice;
+            std::cin >> choice;
+            if (choice == 'y' || choice == 'Y') {
+                if (money >= jailFee) {
+                    pay(jailFee);
+                    leaveJail();
+                    std::cout << GREEN << name << " paid " << jailFee << " to leave jail." << RESET << "\n";
+                }
+                else
+                {
+                    std::cout << RED << "❌ You don't have enough money!" << RESET << "\n";
+                }
+            }
     }
+}
+
+int Player::get_out_of_jail_card()
+{
+    return out_of_jail_card;
+}
+void Player::add_out_of_jail_card()
+{
+    out_of_jail_card++;
+}
+void Player::reduce_out_of_jail_card()
+{
+    out_of_jail_card--;
 }
 
 bool Player::inJail() const {
     return jailStatus;
+}
+
+int Player::get_trains_counter()
+{
+    return trains_counter;
+}
+void Player::add_train()
+{
+    trains_counter++;
 }

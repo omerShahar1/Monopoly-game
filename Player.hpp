@@ -19,6 +19,7 @@ public:
     void addProperty(Slot* property);   
     void listProperties() const;        
     bool ownsAllPropertiesInColor(const std::string& color) const;
+    void checkFullColorSetAndOfferBuild();
 
     std::string getName() const;        
     int getPosition() const;            
@@ -26,9 +27,15 @@ public:
 
     void goToJail();
     void leaveJail();
-    void attemptToLeaveJail(int dice1, int dice2);
+    void attemptToLeaveJail();
     bool inJail() const;
     bool hasRolledDoubles(int dice1, int dice2) const;
+    int get_out_of_jail_card();
+    void add_out_of_jail_card();
+    void reduce_out_of_jail_card();
+    int get_trains_counter();
+    void add_train();
+
 
 private:
     std::string name;
@@ -41,7 +48,9 @@ private:
     std::unordered_map<std::string, int> colorGroupCount;
     bool jailStatus;
     int turnsInJail;
-    static const int jailFee = 50;  
+    int trains_counter=0;
+    static const int jailFee = 50;
+    int out_of_jail_card = 0;
 
     void handleBankruptcy(Player* creditor);
 };

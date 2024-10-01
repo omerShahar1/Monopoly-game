@@ -1,5 +1,6 @@
 #include "SurpriseSlot.hpp"
 #include <iostream>
+#include "Player.hpp"
 #include <cstdlib>
 
 SurpriseSlot::SurpriseSlot() {}
@@ -9,7 +10,7 @@ void SurpriseSlot::performAction(Player& player) {
     switch (surprise) {
         case 0:
             std::cout << player.getName() << " found a surprise and got a Get Out of Jail Free card!\n";
-            // Implement Get Out of Jail logic if necessary
+            player.add_out_of_jail_card();
             break;
         case 1:
             std::cout << player.getName() << " found a surprise and received 200!\n";

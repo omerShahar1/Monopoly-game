@@ -13,6 +13,7 @@ void Utility::performAction(Player& player) {
                 player.pay(price);
                 owner = &player;
                 std::cout << player.getName() << " bought " << name << "!\n";
+                player.addProperty(this);
             }
         }
     } else if (owner != &player) {
@@ -24,7 +25,7 @@ void Utility::performAction(Player& player) {
     }
 }
 
-void Utility::display() const {
+void Utility::display() const { // how it will be printed
     if (owner) {
         std::cout << name << " - Owned by " << owner->getName() << ", Price: " << price << "\n";
     } else {
@@ -32,6 +33,10 @@ void Utility::display() const {
     }
 }
 
-Player* Utility::getOwner() const {
+Player* Utility::getOwner() const { //retuen owner name
     return owner;
+}
+
+std::string Utility::getName() const {
+    return name;
 }

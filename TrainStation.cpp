@@ -18,14 +18,16 @@ void TrainStation::performAction(Player& player) {
                 player.pay(price);
                 owner = &player;
                 std::cout << GREEN << player.getName() << " bought the Train Station!" << RESET << "\n";
+                player.add_train();
+                player.addProperty(this);
             }
         } else {
             std::cout << RED << "❌ You don't have enough money to buy this train station!" << RESET << "\n";
         }
     } else if (owner != &player) {
         int rentDue = 50;  // Basic rent for one train station
-        std::cout << RED << player.getName() << " landed on " << owner->getName() << "'s train station and must pay rent of $" << rentDue << "." << RESET << "\n";
-        player.pay(rentDue, owner);
+        std::cout << RED << player.getName() << " landed on " << owner->getName() << "'s train station and must pay rent of $" << owner->get_trains_counter() * rentDue << "." << RESET << "\n";
+        player.pay(owner->get_trains_counter() * rentDue, owner);
     } else {
         std::cout << GREEN << player.getName() << " landed on their own train station." << RESET << "\n";
     }

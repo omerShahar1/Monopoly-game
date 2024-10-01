@@ -21,13 +21,14 @@ void Street::performAction(Player& player) {
                 std::cout << player.getName() << " bought " << name << " for $" << price << "\n";
                 player.pay(price);
                 owner = &player;
+                player.addProperty(this);
             }
         }
     } else if (owner != &player) {
         // Pay rent to the owner
         int rentDue = rent;
         if (houses > 0) {
-            rentDue *= houses;  // Increase rent based on the number of houses
+            rentDue *= (houses);  // Increase rent based on the number of houses
         }
         std::cout << player.getName() << " landed on " << name << " and must pay $" << rentDue << " in rent.\n";
         player.pay(rentDue, owner);
@@ -49,6 +50,11 @@ void Street::buildHouse() {
 
 int Street::getHouses() const {
     return houses;
+}
+
+bool Street::get_hasHotel()
+{
+    return hasHotel;
 }
 
 std::string Street::getColor() const {

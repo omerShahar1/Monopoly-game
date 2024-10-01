@@ -15,6 +15,7 @@ public:
     std::string getColor() const;
     std::string getName() const;
     Player* getOwner() const;
+    bool get_hasHotel();
 
     // New methods for building houses and accessing house count
     void buildHouse();  // Allows building houses on this street

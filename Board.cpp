@@ -20,7 +20,7 @@ const std::map<std::string, std::string> STREET_COLORS = {
     {"pink", "\033[38;5;204m"},
     {"orange", "\033[38;5;214m"},
     {"red", "\033[38;5;196m"},
-    {"yellow", "\033[38;5;226m"},
+    {"yellow", "\033[36m"},
     {"green", "\033[38;5;46m"},
     {"blue", "\033[38;5;21m"},
     {"white", "\033[97m"}
@@ -162,7 +162,7 @@ void Board::printSlot(int index, const std::vector<Player>& players, bool vertic
 
         // Print the colored street with ownership indicator
         std::cout << "|   " << std::setw(3) << index << "   | "
-                  << "\033[97m" << std::setw(19) << "Utility" << RESET << ownerInfo << " ";
+                  << "\033[97m" << std::setw(19) << street->getName() << RESET << ownerInfo << " ";
     } 
 
     else if (TrainStation* street = dynamic_cast<TrainStation*>(slot)) {
@@ -201,5 +201,5 @@ void Board::printSlot(int index, const std::vector<Player>& players, bool vertic
         }
     }
 
-    std::cout << "| " << std::setw(18) << playerMarkers << "|\n";
+    std::cout << "| " << std::setw(18) << playerMarkers << "\n";
 }
